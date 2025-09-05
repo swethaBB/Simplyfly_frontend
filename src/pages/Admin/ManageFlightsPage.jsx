@@ -3,6 +3,8 @@ import axios from '../../services/Axios';
 import { useRole } from '../../context/RoleContext';
 import manageFlightsBg from '../../assets/manageflights.png';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function ManageFlightsPage() {
   const [flights, setFlights] = useState([]);
@@ -10,6 +12,8 @@ export default function ManageFlightsPage() {
   const [viewMode, setViewMode] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const role = useRole();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     if (viewMode) fetchFlights();
@@ -71,6 +75,23 @@ export default function ManageFlightsPage() {
       }}
     >
       <div className="container text-white" style={{ maxWidth: '1000px' }}>
+        <div
+    style={{
+      position: 'absolute',
+      top: '20px',
+      right: '20px',
+      zIndex: 10
+    }}
+  >
+    <button
+      type="button"
+      className="btn btn-outline-light"
+      style={{ backgroundColor: 'transparent', borderWidth: '2px' }}
+      onClick={() => navigate('/admin/admindashboard')}
+    >
+      ← Back to Dashboard
+    </button>
+  </div>
         <h2 className="mb-4 text-center">Manage Flights</h2>
 
         <div className="mb-4 d-flex gap-3 justify-content-center">

@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from '../../services/Axios';
 import { useRole } from '../../context/RoleContext';
 import createFlightBg from '../../assets/createflight.png'; 
 
 export default function CreateFlightPage() {
   const role = useRole();
+  const navigate = useNavigate();
+
   if (role !== 'ADMIN' && role !== 'FLIGHT_OWNER') return <div>Access Denied</div>;
 
   const [form, setForm] = useState({
@@ -25,7 +28,6 @@ export default function CreateFlightPage() {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post('/api/flights/addflight', form)
@@ -42,7 +44,6 @@ export default function CreateFlightPage() {
           routeId: ''
         });
       })
-
       .catch(err => {
         console.error('Error creating flight:', err);
         setMessage('Failed to create flight. Please check your input.');
@@ -50,11 +51,9 @@ export default function CreateFlightPage() {
   };
 
   return (
-
     <div
       className="d-flex justify-content-center align-items-center vh-100"
-      style={
-        {
+      style={{
         backgroundImage: `url(${createFlightBg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -62,19 +61,30 @@ export default function CreateFlightPage() {
         width: '100vw',
         height: '100vh',
         overflow: 'auto',
-      }
-    }
+      }}
     >
-
       <div
-        className="container text-white"
+        className="container text-white position-relative"
         style={{
           maxWidth: '900px',
           padding: '40px',
         }}
       >
+        {/* Top-right Back Button */}
+        <div className="d-flex justify-content-end mb-3">
+          
+          <button
+            type="button"
+            className="btn btn-outline-light"
+            onClick={() => navigate('/admin/admindashboard')}
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
+        
 
         <h2 className="mb-4 text-center" style={{ fontWeight: '600' }}>Create New Flight</h2>
+        
         <form onSubmit={handleSubmit} className="row g-3">
           {[
             { label: 'Flight Name', name: 'flightName', type: 'text' },
@@ -108,7 +118,6 @@ export default function CreateFlightPage() {
               <div className="alert alert-info">{message}</div>
             </div>
           )}
-          
         </form>
       </div>
     </div>

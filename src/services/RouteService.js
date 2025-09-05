@@ -14,3 +14,6 @@ export const updateRoute = (id, updatedData) =>
 
 export const deleteRoute = (id) =>
   axios.delete(`/api/routes/${id}`);
+
+export const getActiveRoutes = () =>
+  axios.get('/api/routes/active');

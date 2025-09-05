@@ -4,13 +4,12 @@ import bg from '../assets/bg.png';
 import axios from '../services/Axios';
 
 export default function LoginPage() {
-
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
 
   const handleLogin = async () => {
     setError('');
@@ -22,7 +21,6 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await axios.post('/api/v1/auth/login', { email, password });
-
       const token = res.data.access_token;
       if (token) {
         localStorage.setItem('token', token);
@@ -36,25 +34,18 @@ export default function LoginPage() {
         } else {
           navigate('/user/userdashboard');
         }
-
-      } 
-
-      else {
+      } else {
         setError('Invalid response from server.');
       }
-
-    } 
-    catch (err) {
+    } catch (err) {
       console.error('Login failed:', err);
       setError('Invalid credentials. Please try again.');
-    } 
-    finally {
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-
     <div
       style={{
         backgroundImage: `url(${bg})`,
@@ -65,30 +56,67 @@ export default function LoginPage() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingTop: '80px'
+        paddingTop: '80px',
       }}
     >
-
       <div className="text-center p-4 rounded" style={{ minWidth: '320px', color: 'white' }}>
         <h2 className="mb-4" style={{ color: 'black' }}>Welcome to SimplyFly</h2>
-        <input
-          type="email"
-          className="form-control mb-3"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
 
+        {/* Email Input with Icon */}
+        <div className="mb-3 position-relative">
+          <input
+            type="email"
+            className="form-control ps-5"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+          <i
+            className="bi bi-person position-absolute"
+            style={{
+              left: '12px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              fontSize: '1.2rem',
+              color: '#888',
+            }}
+          ></i>
+        </div>
 
-        <input
-          type="password"
-          className="form-control mb-3"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
+        {/* Password Input with Toggle */}
+        <div className="mb-3 position-relative">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            className="form-control ps-5 pe-5"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+          <i
+            className="bi bi-lock position-absolute"
+            style={{
+              left: '12px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              fontSize: '1.2rem',
+              color: '#888',
+            }}
+          ></i>
+          <i
+            className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'} position-absolute`}
+            onClick={() => setShowPassword(!showPassword)}
+            style={{
+              right: '12px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              fontSize: '1.2rem',
+              color: '#888',
+              cursor: 'pointer',
+            }}
+          ></i>
+        </div>
 
-
+        {/* Login Button */}
         <button
           className="btn btn-outline-light w-100"
           onClick={handleLogin}
@@ -96,9 +124,23 @@ export default function LoginPage() {
         >
           {loading ? 'Logging in...' : 'Login'}
         </button>
+
+        {/* Error Message */}
         {error && <div className="text-danger mt-2">{error}</div>}
+
+        {/* Register Link */}
+        <div className="mt-3">
+          <small style={{ color: 'black' }}>
+            New to SimplyFly?{' '}
+            <span
+              style={{ color: '#007bff', cursor: 'pointer', textDecoration: 'underline' }}
+              onClick={() => navigate('/register')}
+            >
+              Register
+            </span>
+          </small>
+        </div>
       </div>
-      
     </div>
   );
 }

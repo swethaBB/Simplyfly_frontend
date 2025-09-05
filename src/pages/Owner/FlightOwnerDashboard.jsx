@@ -23,8 +23,11 @@ export default function FlightOwnerDashboard() {
         <h2 style={{ color: 'white', fontWeight: '600', fontSize: '2rem', marginBottom: '30px' }}>
           Flight Owner Dashboard
         </h2>
-        <Link to="/create-flight" className="btn btn-success me-3">Create Flight</Link>
-        <Link to="/manage-flights" className="btn btn-primary">Manage My Flights</Link>
+        <div className="d-flex justify-content-center gap-3 flex-wrap">
+          <Link to="/create-flight" className="btn btn-success">Create Flight</Link>
+          <Link to="/manage-flights" className="btn btn-primary">Manage My Flights</Link>
+          <Link to="/owner-bookings" className="btn btn-warning">View My Bookings</Link>
+        </div>
       </div>
     </div>
   );

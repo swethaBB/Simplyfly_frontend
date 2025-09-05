@@ -11,13 +11,20 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import CreateFlightPage from './pages/Admin/CreateFlightPage';
 import ManageFlightsPage from './pages/Admin/ManageFlightsPage';
 import FlightOwnerDashboard from './pages/Owner/FlightOwnerDashboard';
-import AdminBookingList from './pages/Admin/BookingList'; // ✅ Import added
+import AdminBookingList from './pages/Admin/BookingList';
+import UserManagement from './pages/Admin/UserManagement';
+import RouteManager from './pages/Admin/RouteManager';
+import BookingReviewPage from './pages/User/BookingReviewPage';
+import HomePage from './pages/HomePage';
+import RegisterPage from './pages/Register'; // adjust path if needed
+
 
 export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/user/search-flight" element={<SearchFlightPage />} />
         <Route path="/search-route" element={<SearchRoutePage />} />
         <Route path="/select-seat/:flightId" element={<SelectSeatPage />} />
@@ -29,7 +36,12 @@ export default function Router() {
         <Route path="/create-flight" element={<CreateFlightPage />} />
         <Route path="/manage-flights" element={<ManageFlightsPage />} />
         <Route path="/owner/flightownerdashboard" element={<FlightOwnerDashboard />} />
-        <Route path="/admin/bookings" element={<AdminBookingList />} /> {/* ✅ Route confirmed */}
+        <Route path="/admin/bookings" element={<AdminBookingList />} />
+        <Route path="/admin/users" element={<UserManagement />} />
+        <Route path="/admin/routes" element={<RouteManager />} />
+        <Route path="/review-booking" element={<BookingReviewPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
       </Routes>
     </BrowserRouter>
   );

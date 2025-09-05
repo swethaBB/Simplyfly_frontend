@@ -65,10 +65,17 @@ export default function BookingPage() {
         }
       });
 
-      const { bookingId, amount } = res.data;
+      const { bookingId } = res.data;
 
-      navigate(`/payment/${bookingId}`, {
-        state: { bookingId, amount }
+      navigate('/review-booking', {
+        state: {
+          bookingId,
+          passengerName,
+          email,
+          seatNumbers: selected,
+          totalPrice,
+          flightId
+        }
       });
 
     } catch (err) {
@@ -140,7 +147,7 @@ export default function BookingPage() {
           onClick={handleBooking}
           disabled={loading || flight?.status === 'CANCELLED'}
         >
-          {loading ? 'Processing...' : 'Confirm & Proceed to Payment'}
+          {loading ? 'Processing...' : 'Confirm & Review Booking'}
         </button>
 
       </div>

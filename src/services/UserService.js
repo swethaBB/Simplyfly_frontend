@@ -21,3 +21,6 @@ export const updateUser = (id, updatedData) =>
 
 export const deleteUser = (id) =>
   axios.delete(`/api/users/${id}`);
+
+export const updateUserRole = (id, roleData) =>
+  axios.put(`/api/users/${id}/role`, roleData);

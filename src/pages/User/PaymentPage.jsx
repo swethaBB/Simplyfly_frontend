@@ -1,67 +1,64 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import bgpayment from '../../assets/userbg.png';
+import { useEffect, useState } from 'react';
+import PaymentForm from "../../components/PaymentForm";
+import bgpay from '../../assets/bookingbg.png';
+import { toast } from 'react-toastify';
 
 export default function PaymentPage() {
   const navigate = useNavigate();
-  const [method, setMethod] = useState('');
-  const [error, setError] = useState('');
+  const [amount, setAmount] = useState(null);
+  const [bookingId, setBookingId] = useState(null); // Optional: for tracking
+  const [isPaying, setIsPaying] = useState(false);
 
-  const handlePayment = () => {
-    if (!method) {
-      setError('Please select a payment method');
-      return;
+  useEffect(() => {
+    const stored = localStorage.getItem('paymentData');
+    if (stored) {
+      const { bookingId: storedId, amount: storedAmount } = JSON.parse(stored);
+      setAmount(storedAmount);
+      setBookingId(storedId);
+    } else {
+      toast.error("Missing payment data. Redirecting...");
+      navigate('/');
     }
+  }, [navigate]);
 
-    navigate('/success');
+  const handlePayment = async (method) => {
+    setIsPaying(true);
+    toast.info(`Processing ${method} payment...`);
+    try {
+      // Simulate payment processing
+      await new Promise(res => setTimeout(res, 1500));
+      toast.success("Payment successful!");
+      navigate('/payment-success'); // Adjust route as needed
+    } catch (err) {
+      toast.error("Payment failed. Please try again.");
+    } finally {
+      setIsPaying(false);
+    }
   };
 
   return (
     <div
-      className="d-flex align-items-center justify-content-center"
+      className="d-flex flex-column align-items-center justify-content-start"
       style={{
-        backgroundImage: `url(${bgpayment})`,
+        backgroundImage: `url(${bgpay})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         minHeight: '100vh',
         width: '100vw',
-        padding: '40px'
+        paddingTop: '100px'
       }}
     >
-      <div
-        className="shadow-lg p-4 rounded"
-        style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          maxWidth: '500px',
-          width: '100%'
-        }}
-      >
-        <h2 className="mb-4 text-center" style={{ fontWeight: '600', fontSize: '2rem', color: 'black' }}>
-          Complete Your Payment
-        </h2>
+      <h2 className="mb-4" style={{ fontWeight: '600', fontSize: '2rem', color: 'black' }}>
+        Complete Your Payment
+      </h2>
 
-        <div className="mb-3">
-          <label className="form-label" style={{ color: 'black' }}>Select Payment Method</label>
-          <select
-            className="form-select"
-            value={method}
-            onChange={e => setMethod(e.target.value)}
-          >
-            <option value="">-- Choose Method --</option>
-            <option value="CARD">Card</option>
-            <option value="UPI">UPI</option>
-            <option value="NET_BANKING">Net Banking</option>
-          </select>
-        </div>
-
-        {error && <p className="text-danger text-center">{error}</p>}
-
-        <button
-          className="btn btn-primary w-100 mt-3"
-          onClick={handlePayment}
-        >
-          Pay Now
-        </button>
+      <div style={{ width: '100%', maxWidth: '500px' }} className="px-3">
+        {amount ? (
+          <PaymentForm onPay={handlePayment} isPaying={isPaying} />
+        ) : (
+          <p className="text-muted">Loading payment form...</p>
+        )}
       </div>
     </div>
   );
